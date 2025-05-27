@@ -16,7 +16,7 @@ import { DataContext } from "../../Components/DataProvider/DataProvider";
 import { Type } from "../../Utility/action.type";
 
 // importing chapa components
-import ChapaCheckout from '@chapa_et/inline.js';
+// import ChapaCheckout from '@chapa_et/inline.js';
 
 // importing axios instance
 import { axiosInstance } from "../../Api/axios";
@@ -39,24 +39,25 @@ import { useNavigate } from "react-router-dom";
 
 
 function Payment() {
+  // using usecontext to get user, basket and popup data
   const [{ user, basket, popup }, dispatch] = useContext(DataContext);
 
+  // calculating the total number of items in the basket
   const totalItem = basket?.reduce((amount, item) => {
-    return (amount) + (item.amount);
+    return amount + item.amount;
   }, 0);
 
+  // calculating the total price of the items in the basket
   const total = basket.reduce((amount, item) => {
-    return (item.amount + amount) * (item.price );
+    return amount + item.amount * item.price;
   }, 0);
-  
-  const totalInt = parseInt(total);
-  console.log(totalInt);
+
+  // state to manage card error and processing state
   const [cardError, setCardError] = useState(null);
   const [processing, setProcessing] = useState(false);
-  const [checkout_url, setCheckout] = useState(null)
 
-  
 
+  const [checkout_url, setCheckout] = useState(null);
 
   const navigate = useNavigate();
 
@@ -69,44 +70,49 @@ function Payment() {
 
     try {
       setProcessing(true);
+
       const response = await axiosInstance({
         method: "POST",
-        url: `/payment/create?total=${totalInt * 100}`,
+        url: `/payment/create?total=${total}`,
+        data: {
+          email: user?.email,
+          first_name: user?.displayName?.split(" ")[0],
+          last_name: user?.displayName?.split(" ")[1],
+          return_url: "https://localhost:5173/orders-success",
+        },
       });
 
-      const  checkoutUrl = response.data?.checkout_url;
-      setCheckout(checkoutUrl)
-      const  tx_ref = response.data?.tx_ref;
+      const checkoutUrl = response.data?.checkout_url;
+      const tx_ref = response.data?.tx_ref;
 
-      
+      const orderDocRef = doc(
+        collection(doc(db, "users", user.uid), "orders"),
+        tx_ref
+      );
 
-    
+      // Create a new document reference in the user's orders collection
+      await setDoc(orderDocRef, {
+        basket: basket,
+        amount: total,
+        created: new Date(),
+      });
 
-  const orderDocRef = doc(
-    collection(doc(db, "users", user.uid), "orders"), // This builds the reference path
-    tx_ref                                // This is the final doc ID
-  );
+      if (!checkoutUrl) {
+        dispatch({
+          type: Type.SET_POPUP,
+          message: "Failed to create payment intent. Please try again.",
+        });
+        setProcessing(false);
+        return;
+      }
 
- 
-
-
-  // Use the modular setDoc function to write the data
-  await setDoc(orderDocRef, {
-    basket: basket,
-    amount: totalInt,
-  });
-
-
-
-        
-      dispatch({ type: Type.EMPTY_BASKET });
+      window.location.href = checkoutUrl;
 
       setProcessing(false);
       dispatch({
-            type: Type.SET_POPUP,
-            message: "Payment successfully completed!",
-          });
-      navigate("/orders", { state: { msg: "you have placed new Order" } });
+        type: Type.SET_POPUP,
+        message: "Redirecting to Chapa payment...",
+      });
     } catch (error) {
       console.log(error);
       setProcessing(false);
@@ -116,9 +122,7 @@ function Payment() {
   return (
     <LayOut>
       {/* header */}
-      <div className={styles.payment__header}>
-        Checkout ({totalItem}) items
-      </div>
+      <div className={styles.payment__header}>Checkout ({totalItem}) items</div>
       {/* payment method */}
       <section className={styles.payment}>
         {/* address */}
@@ -153,7 +157,6 @@ function Payment() {
                 {cardError && (
                   <small style={{ color: "red" }}>{cardError}</small>
                 )}
-                
 
                 {/* price */}
                 <div className={styles.payment__price}>
@@ -162,11 +165,13 @@ function Payment() {
                       <p>Total Order |</p> <CurrencyFormat amount={total} />
                     </span>
                   </div>
-                  <Link to={checkout_url}>
-                  <button type="submit">
-                    Pay Now
+                  <button type="submit" disabled={processing}>
+                    {processing ? (
+                      <ClipLoader size={20} color="#fff" />
+                    ) : (
+                      "Pay Now"
+                    )}
                   </button>
-                  </Link>
                 </div>
               </form>
             </div>

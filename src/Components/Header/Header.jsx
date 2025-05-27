@@ -1,11 +1,10 @@
-
 // importing react and useContext
 import React, { useContext } from "react";
 
 // importing css module
 import styles from "./Header.module.css";
 
-// importing Link from react-router-dom 
+// importing Link from react-router-dom
 import { Link } from "react-router-dom";
 
 // icons
@@ -22,15 +21,13 @@ import { auth } from "../../Utility/firebase";
 
 import { Type } from "../../Utility/action.type";
 
-
 const Header = () => {
-
-    // using useContext to get the user and basket data 
+  // using useContext to get the user and basket data
   const [{ user, basket, popup }, dispatch] = useContext(DataContext);
 
-    // calculating the total number of items in the basket
+  // calculating the total number of items in the basket
   const totalItem = basket?.reduce((amount, item) => {
-    return (amount) + (item.amount);
+    return amount + item.amount;
   }, 0);
 
   const handleLogout = async () => {
@@ -41,17 +38,12 @@ const Header = () => {
     });
   };
 
-
   return (
     <section className={styles.fixed}>
       <section>
-
-        
         <div className={styles.header__container}>
-
-{/* amazon logo and location ------------------- */}
+          {/* amazon logo and location ------------------- */}
           <div className={styles.logo__container}>
-
             {/* logo */}
             <Link to="/">
               <img
@@ -71,13 +63,9 @@ const Header = () => {
               </div>
             </div>
           </div>
-{/* amazon logo and location ends ---------------- */}
+          {/* amazon logo and location ends ---------------- */}
 
-
-
-
-
-{/* search section --------------------------- */}
+          {/* search section --------------------------- */}
           <div className={styles.search}>
             <select name="" id="">
               <option value="">All</option>
@@ -85,15 +73,10 @@ const Header = () => {
             <input type="text" />
             <BsSearch size={38} />
           </div>
-{/* search section ends here ------------------ */}
+          {/* search section ends here ------------------ */}
 
-
-
-
-
-{/* other sections --------------------------------- */}
+          {/* other sections --------------------------------- */}
           <div className={styles.order__container}>
-
             {/* language */}
             <Link to="" className={styles.language}>
               <img
@@ -106,28 +89,22 @@ const Header = () => {
               </select>
             </Link>
 
-
             {/* auth */}
             <Link to={!user && "/auth"}>
               <div>
                 {user ? (
-                <>
-                  <p>Hello, {user?.email?.split('@')[0]}</p>
-                  <span onClick={()=>handleLogout()}>
-                      Sign Out
-                  </span>
-                </>
+                  <>
+                    <p>Hello, {user?.displayName?.split(" ")[0]}</p>
+                    <span onClick={() => handleLogout()}>Sign Out</span>
+                  </>
                 ) : (
-                <>
-                <p>Hello, Sign In</p>
-                <span>Account & Lists</span>
-                </>
-                  
+                  <>
+                    <p>Hello, Sign In</p>
+                    <span>Account & Lists</span>
+                  </>
                 )}
               </div>
-              
             </Link>
-
 
             {/* orders */}
             <Link to="/orders">
@@ -135,22 +112,14 @@ const Header = () => {
               <span>& Orders</span>
             </Link>
 
-
-
             {/* cart */}
             <Link to="/cart" className={styles.cart}>
               <BiCart size={35} />
               <span>{totalItem}</span>
             </Link>
-
           </div>
-{/* other sections end ---------------------- */}
-        
-        
-        
+          {/* other sections end ---------------------- */}
         </div>
-
-
       </section>
       <LowerHeader />
     </section>

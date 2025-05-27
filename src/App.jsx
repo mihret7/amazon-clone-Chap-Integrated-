@@ -17,9 +17,10 @@ const hasFetchedInitialBasket = useRef(false);
 const [isFetchingBasket, setIsFetchingBasket] = useState(false);
 
 
-console.log(popup)
+
 
   useEffect(() => {
+    dispatch({ type: Type.SET_LOADING, loading: true });  
     auth.onAuthStateChanged(async (user) => {
       // Check if user is authenticated (logged in)
       if (user) {
@@ -27,19 +28,18 @@ console.log(popup)
           type: Type.SET_USER,
           user: user,
         });
-         
+
         setIsFetchingBasket(true); // Start fetching
 
-
         // Fetch and set cart from Firebase
-        const fetchedBasket  = await fetchCartFromFirebase(user.uid);
-        console.log("Fetched basket from Firebase:", fetchedBasket);
+        const fetchedBasket = await fetchCartFromFirebase(user.uid);
+
         dispatch({
           type: Type.SET_BASKET,
           basket: fetchedBasket || [],
         });
-       hasFetchedInitialBasket.current = true;
-      setIsFetchingBasket(false); // Done fetching
+        hasFetchedInitialBasket.current = true;
+        setIsFetchingBasket(false); // Done fetching
       } else {
         // User is not authenticated (logged out)
         dispatch({
@@ -53,6 +53,7 @@ console.log(popup)
           basket: [],
         });
       }
+      dispatch({ type: Type.SET_LOADING, loading: false });
     });
 
   }, []);

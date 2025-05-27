@@ -9,7 +9,8 @@ import { Type } from "./action.type";
 export const initialState = {
   basket: [],
   user: null,
-   popup: null,
+  popup: null,
+  loading: true, 
 };
 
 
@@ -18,15 +19,18 @@ export const reducer = (state, action) => {
 
 
   switch (action.type) {
-
     // add to basket
     case Type.ADD_TO_BASKET:
-
       // check if the item already exists in the basket
-      const existingItem = state.basket.find((item) => item.id === action.item.id);
+      const existingItem = state.basket.find(
+        (item) => item.id === action.item.id
+      );
 
       if (!existingItem) {
-        return {...state, basket: [...state.basket, { ...action.item, amount: 1 }]};
+        return {
+          ...state,
+          basket: [...state.basket, { ...action.item, amount: 1 }],
+        };
       } else {
         const updatedBasket = state.basket.map((item) => {
           return item.id === action.item.id
@@ -34,12 +38,11 @@ export const reducer = (state, action) => {
             : item;
         });
 
-        return {...state, basket: updatedBasket};
+        return { ...state, basket: updatedBasket };
       }
- 
+
     // remove from basket
     case Type.REMOVE_FROM_BASKET:
-
       // check if the item already exists in the basket and get the index of the item
       const index = state.basket.findIndex((item) => item.id === action.id);
 
@@ -60,22 +63,25 @@ export const reducer = (state, action) => {
         basket: newBasket,
       };
 
-    
-    
-
     // set user
     case Type.SET_USER:
       return {
         ...state,
         user: action.user,
       };
-    
-      // set basket
-      case Type.SET_BASKET:
-          return {
-            ...state,
-            basket: action.basket,
-          };
+
+    case Type.SET_LOADING: 
+      return {
+        ...state,
+        loading: action.loading,
+      };
+
+    // set basket
+    case Type.SET_BASKET:
+      return {
+        ...state,
+        basket: action.basket,
+      };
 
     // empty basket
     case Type.EMPTY_BASKET:
@@ -85,17 +91,16 @@ export const reducer = (state, action) => {
       };
 
     case Type.SET_POPUP:
-  return {
-    ...state,
-    popup: action.message,
-  };
+      return {
+        ...state,
+        popup: action.message,
+      };
 
-case Type.CLEAR_POPUP:
-  return {
-    ...state,
-    popup: null,
-  };
-
+    case Type.CLEAR_POPUP:
+      return {
+        ...state,
+        popup: null,
+      };
 
     // default case
     default:

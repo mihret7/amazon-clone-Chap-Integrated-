@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 // importing context
 import { DataContext } from "../DataProvider/DataProvider";
+import Loader from "../Loader/Loader";
 
 
 
@@ -15,15 +16,20 @@ const ProtectedRoute = ({ children, message, redirect }) => {
   const navigate = useNavigate();
 
   // using useContext to get the user data from DataContext
-  const [{ user }, dispatch] = useContext(DataContext);
+  const [{ user, loading }, dispatch] = useContext(DataContext);
 
   useEffect(() => {
-    if (!user) {
+    if (!loading && !user) {
       navigate("/auth", { state: { message, redirect } });
     }
-  }, [user]);
+  }, [user, loading, navigate, message, redirect]);
 
-
+  if (loading) {
+    // Show nothing or a loading spinner while auth initializes
+    return <>
+      <Loader/>
+    </>;
+  }
 
   return children;
 };
