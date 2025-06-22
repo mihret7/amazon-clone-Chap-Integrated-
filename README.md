@@ -2,7 +2,7 @@
 
 A modern Amazon-inspired e-commerce web application built with **React (Vite)**, **Firebase** (database & authentication), and **Chapa** for payment integration.
 
-[View on GitHub](https://github.com/mihret7/amazon-clone)
+[View on GitHub](https://github.com/mihret7/amazon-clone-Chap-Integrated-)
 
 ---
 
@@ -19,7 +19,7 @@ A modern Amazon-inspired e-commerce web application built with **React (Vite)**,
 
 ## Demo
 
-[live demo](https://amazon-clone-by-mihret.netlify.app)
+[live demo](https://amazon-clone-by-mihret-chapa.netlify.app)
 
 ---
 
@@ -35,7 +35,7 @@ A modern Amazon-inspired e-commerce web application built with **React (Vite)**,
 
 1. **Clone this repo:**
     ```bash
-    git clone https://github.com/mihret7/amazon-clone.git
+    git clone https://github.com/mihret7/amazon-clone-Chap-Integrated-.git
     cd amazon-clone
     ```
 
