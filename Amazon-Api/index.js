@@ -4,7 +4,6 @@ const express = require("express");
 const cors = require("cors");
 
 const chapaKey = process.env.CHAPA_KEY;
-
 // using chapa payment
 const Chapa = require("chapa");
 let myChapa = new Chapa(chapaKey)
@@ -37,9 +36,9 @@ app.post("/payment/create", async (req, res) => {
       email: email,
       first_name: first_name,
       last_name: last_name,
-      return_url: "https://amazon-clone-chapa.netlify.app/orders-success",
+      // return_url: "https://amazon-clone-chapa.netlify.app/orders-success",
     };
-
+console.log(customerInfo);
     try {
       const response = await myChapa.initialize(customerInfo, { autoRef: true });
       res.status(201).json({
