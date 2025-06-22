@@ -3,11 +3,7 @@ dotenv.config();
 const express = require("express");
 const cors = require("cors");
 
-
-
 const chapaKey = process.env.CHAPA_KEY;
-
-
 
 // using chapa payment
 const Chapa = require("chapa");
@@ -23,9 +19,6 @@ app.get("/", (req, res) => {
     message: "success",
   });
 });
-
-
-
 
 
 app.post("/payment/create", async (req, res) => {
@@ -49,14 +42,12 @@ app.post("/payment/create", async (req, res) => {
 
     try {
       const response = await myChapa.initialize(customerInfo, { autoRef: true });
-      console.log(response);
       res.status(201).json({
         message: "Payment intent created successfully",
         checkout_url: response.data?.checkout_url,
         tx_ref: response.tx_ref,
       });
     } catch (error) {
-      console.error(error);
       res.status(500).json({ message: "Payment initialization failed", error });
     }
   } else {
@@ -66,6 +57,8 @@ app.post("/payment/create", async (req, res) => {
   }
 });
 
+app.listen(5000, () => {
+  console.log("Server is running on port 5000");
+});
 
 
-exports.api = onRequest(app);
