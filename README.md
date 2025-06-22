@@ -1,12 +1,84 @@
-# React + Vite
+# Amazon Clone
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern Amazon-inspired e-commerce web application built with **React (Vite)**, **Firebase** (database & authentication), and **Chapa** for payment integration.
 
-Currently, two official plugins are available:
+[View on GitHub](https://github.com/mihret7/amazon-clone)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## Features
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- 🔥 **React (Vite)** frontend for a fast and responsive user experience
+- 🔐 **Firebase Authentication**: Secure login & registration
+- 🛒 **Product Listing**: Browse products, detailed product pages
+- 🛍️ **Shopping Cart**: Add, remove, and update items in your cart
+- 💳 **Checkout & Chapa Payments**: Seamless and secure payment integration
+- ☁️ **Firebase Database**: Real-time product, user, and order management
+
+---
+
+## Demo
+
+[live demo](https://amazon-clone-by-mihret.netlify.app)
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js & npm installed
+- Firebase project (with Authentication & Firestore enabled)
+- Chapa for payment processing
+
+### Local Setup
+
+1. **Clone this repo:**
+    ```bash
+    git clone https://github.com/mihret7/amazon-clone.git
+    cd amazon-clone
+    ```
+
+2. **Install dependencies:**
+    ```bash
+    npm install
+    ```
+
+3. **Configure Environment Variables:**
+    - Copy `.env.sample` to `.env` and fill in your Firebase and chapa credentials.
+
+4. **Run the application:**
+    ```bash
+    npm run dev
+    ```
+
+5. Visit `http://localhost:5173` in your browser.
+
+---
+
+## Project Structure
+
+```
+src/
+  components/      # Reusable UI components
+  pages/           # Application pages (Home, Product, Cart, Checkout, etc.)
+  firebase.js      # Firebase configuration and initialization
+  App.jsx          # Main App component
+  main.jsx         # Entry point
+```
+
+---
+
+## Technologies Used
+
+- **Frontend:** React, Vite, CSS/Styled Components
+- **Backend & Auth:** Firebase (Firestore, Authentication)
+- **Payments:** Chapa
+
+---
+
+
+
+## Author
+
+- [mihret7](https://github.com/mihret7)
