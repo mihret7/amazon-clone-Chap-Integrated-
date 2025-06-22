@@ -46,7 +46,7 @@ app.post("/payment/create", async (req, res) => {
       email: email,
       first_name: first_name,
       last_name: last_name,
-      return_url: 'http://localhost:5173/orders-success',
+      return_url: "http://localhost:5173/orders-success",
     };
 
     try {
