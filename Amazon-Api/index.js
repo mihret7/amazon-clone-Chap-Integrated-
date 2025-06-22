@@ -1,14 +1,17 @@
-
+const dotenv = require("dotenv");
+dotenv.config();
 const express = require("express");
 const cors = require("cors");
 
-const dotenv = require("dotenv");
-dotenv.config();
 
-const stripeKey = process.env.STRIPE_KEY;
 
-// using stripe payment
-const stripe = require("stripe")(stripeKey);
+const chapaKey = process.env.CHAPA_KEY;
+
+
+
+// using chapa payment
+const Chapa = require("chapa");
+let myChapa = new Chapa(chapaKey)
 
 
 const app = express();
@@ -22,31 +25,47 @@ app.get("/", (req, res) => {
 });
 
 
-app.post("/payment/create", async (req, res)=>{
-  const total = parseInt(req.query.total);
-  console.log(total)
 
-  if(total > 0){
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: total,
-      currency: "usd",
-    });
-    res.status(201).json({
-      clientSecret: paymentIntent.client_secret,
-      message: "Payment intent created successfully",
-    });
-  }
-  else {
-    res.status(403).json({
+
+
+app.post("/payment/create", async (req, res) => {
+  const total = req.query.total;
+  const {
+    email,
+    first_name,
+    last_name,
+  } = req.body;
+ 
+
+  if (total > 0) {
+    const customerInfo = {
+      amount: total.toString(),
+      currency: "ETB",
+      email: email,
+      first_name: first_name,
+      last_name: last_name,
+      return_url: "https://amazon-clone-chapa.netlify.app/orders-success",
+    };
+
+    try {
+      const response = await myChapa.initialize(customerInfo, { autoRef: true });
+      console.log(response);
+      res.status(201).json({
+        message: "Payment intent created successfully",
+        checkout_url: response.data?.checkout_url,
+        tx_ref: response.tx_ref,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Payment initialization failed", error });
+    }
+  } else {
+    res.status(400).json({
       message: "Payment amount must be greater than 0",
     });
-}
-})
+  }
+});
 
 
 
-let port = 3001
-app.listen(port, (error)=>{
-    if(error) {console.log("Error starting amazon server", error);}
-    else {console.log(`Amazon server is running on port: ${port}, http://localhost:${port}`);}
-})
+exports.api = onRequest(app);

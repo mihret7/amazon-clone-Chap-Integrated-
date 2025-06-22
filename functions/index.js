@@ -68,30 +68,4 @@ app.post("/payment/create", async (req, res) => {
   }
 });
 
-
-
-
-// // POST /api/verify
-// app.post('/verify', async (req, res) => {
-//   const { tx_ref } = req.body;
-
-//   if (!tx_ref) {
-//     return res.status(400).json({ error: 'Transaction reference is required.' });
-//   }
-
-//   try {
-//     myChapa
-//       .verify(tx_ref)
-//       .then((d) => console.log(d))
-//       .catch((e) => console.log(e));
-//   } catch (error) {
-//     return res.status(500).json({
-//       error: 'Server error during verification.',
-//       details: error.response?.data || error.message,
-//     });
-//   }
-// });
-
-
-
 exports.api = onRequest(app);
