@@ -36,7 +36,7 @@ app.post("/payment/create", async (req, res) => {
       email: email,
       first_name: first_name,
       last_name: last_name,
-      // return_url: "https://amazon-clone-chapa.netlify.app/orders-success",
+      return_url: "https://amazon-clone-chapa.netlify.app/orders-success",
     };
 console.log(customerInfo);
     try {
