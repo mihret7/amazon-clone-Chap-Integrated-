@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: "https://amazon-api-f8sq.onrender.com",
+  baseURL: "https://amazon-clone-chap-integrated-1.onrender.com",
 });
 
 export { axiosInstance };
